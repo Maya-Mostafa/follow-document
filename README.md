@@ -1,5 +1,5 @@
 # Follow Document
-
+Original sample here - [https://github.com/pnp/sp-dev-fx-webparts/tree/main/samples/react-follow-document](https://github.com/pnp/sp-dev-fx-webparts/tree/main/samples/react-follow-document)
 ## Summary
 
 This solution has the goal to easily identify/follow user key documents from all Tenant and easily access them in Modern Pages and Microsoft Teams. This solution uses the Out of Box Office Page >  Favorites Files Tab with combination of MSGraph queries and extension for Microsoft Teams.
