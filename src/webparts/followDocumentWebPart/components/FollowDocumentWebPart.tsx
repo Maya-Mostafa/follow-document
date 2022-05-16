@@ -198,7 +198,9 @@ export default class FollowDocumentWebPart extends React.Component<IFollowDocume
         graphData.responses.forEach((data: any) => {
           followDocuments.forEach((followDocument: FollowDocument) => {
             if (followDocument.SiteId === data.body.id && (followDocument.Domain === undefined || followDocument.Domain === "")) {
-              followDocument.Domain = data.body.siteCollection.hostname;
+              // followDocument.Domain = data.body.siteCollection.hostname;
+              // for documents not in a shared library, there is no hostname returned, hence using the first portion of body.id as the hostname
+              followDocument.Domain = data.body.id.substring(0, data.body.id.indexOf(','));
               followDocument.WebUrl = data.body.webUrl;
               followDocument.WebName = data.body.displayName;
               followDocument.documentCardActions = [
