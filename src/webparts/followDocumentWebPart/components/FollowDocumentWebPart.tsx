@@ -37,6 +37,7 @@ import { Stack, IStackTokens } from 'office-ui-fabric-react/lib/Stack';
 const stackTokens: Partial<IStackTokens> = { childrenGap: 20 };
 
 export default class FollowDocumentWebPart extends React.Component<IFollowDocumentWebPartProps, IFollowDocumentWebPartState> {
+  
   private _siteId: string = null;
   private _listId: string = null;
   private _panelPlaceHolder: HTMLDivElement = null;
@@ -54,6 +55,7 @@ export default class FollowDocumentWebPart extends React.Component<IFollowDocume
       document.createElement("div")
     );
     this.getListItems();
+
   }
 
   private getListItems = () => {
@@ -65,22 +67,29 @@ export default class FollowDocumentWebPart extends React.Component<IFollowDocume
     }
     let followDocuments: FollowDocument[] = [];
     this.getFollowDocuments(followDocuments).then((Items: FollowDocument[]) => {
-      //Order by Date
-      Items = Items.sort((a, b) => {
-        return b.followedDateTime.getTime() - a.followedDateTime.getTime();
-      });
-      let uniq = {};
+
       let group: Array<IDropdownOption> = new Array<IDropdownOption>();
-      //Remove duplicated from array
-      let uniqueArray = [];
-      uniqueArray = Items.filter(obj => !uniq[obj.WebUrl] && (uniq[obj.WebUrl] = true));
       group.push({ key: '0', text: 'All Sites' });
-      uniqueArray.forEach(Item => {
-        group.push({
-          key: Item.WebUrl,
-          text: "Site: " + Item.WebName,
+
+
+      //Order by Date
+      if (Items){
+        Items = Items.sort((a, b) => {
+          return b.followedDateTime.getTime() - a.followedDateTime.getTime();
         });
-      });
+
+        let uniq = {};
+        //Remove duplicated from array
+        let uniqueArray = [];
+        uniqueArray = Items.filter(obj => !uniq[obj.WebUrl] && (uniq[obj.WebUrl] = true));
+        uniqueArray.forEach(Item => {
+          group.push({
+            key: Item.WebUrl,
+            text: "Site: " + Item.WebName,
+          });
+        });
+      }
+
       this.setState({
         Items: Items,
         ItemsSearch: Items,
@@ -285,7 +294,6 @@ export default class FollowDocumentWebPart extends React.Component<IFollowDocume
   /************************************************************************************* */
 
   private onActionTeamsClick = (action: FollowDocument, ev: React.SyntheticEvent<HTMLElement>): void => {
-
     const dialog: FollowDocumentDialog = new FollowDocumentDialog();
     dialog.initializedTeams(action, this.props.context, followType.SendTeams);
     ev.stopPropagation();
@@ -424,28 +432,35 @@ export default class FollowDocumentWebPart extends React.Component<IFollowDocume
           } />
         <div className={styles.spinnerLoading}>
           {(this.state.visible) &&
-
             <Spinner size={SpinnerSize.large} />
-
           }
           {(!this.state.visible) &&
             <Stack tokens={stackTokens}>
-
               <SearchBox style={{ width: "80%" }} placeholder="Search Document" onSearch={checkSearchDrive} onClear={checkClear} />
             </Stack>
           }
         </div>
         <div className={styles.grid}>
-          <FollowDocumentGrid
-            items={this.state.ItemsSearch}
-            onRenderGridItem={(item, finalSize: ISize, isCompact: boolean) => this._onRenderGridItem(item, finalSize, isCompact)}
-          />
+            <FollowDocumentGrid
+              items={this.state.ItemsSearch}
+              onRenderGridItem={(item, finalSize: ISize, isCompact: boolean) => this._onRenderGridItem(item, finalSize, isCompact)}
+            />
         </div>
+        {!this.state.visible && !this.state.ItemsSearch &&
+          <div className={styles.emptyStateControl}>
+            <div className={styles.emptyStateImage}>
+              <img src="https://res.cdn.office.net/officehub/officestartresources/favorites_light_and_dark.svg" alt="Empty state icon" />
+            </div>
+            <div className={styles.emptyStateTextWrapper}>
+              <div className={styles.title} role="status" aria-live="polite">No favorites yet</div>
+              <div className={styles.subtitle} role="status" aria-live="polite">See something you love? Favorite it and we'll put it here.</div>
+            </div>
+          </div>
+        }
       </>
     );
   }
   private _onRenderGridItem = (item: FollowDocument, finalSize: ISize, isCompact: boolean): JSX.Element => {
-
     return <div className={styles.documentTile} data-is-focusable={true} aria-label={item.Title} >
       <DocumentCard
         type={isCompact ? DocumentCardType.compact : DocumentCardType.normal}
