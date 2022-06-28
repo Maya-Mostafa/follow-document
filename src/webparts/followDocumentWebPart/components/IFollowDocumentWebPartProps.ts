@@ -5,6 +5,8 @@ export interface IFollowDocumentWebPartProps {
   context: WebPartContext;
   displayMode: DisplayMode;
   updateProperty: (value: string) => void;
+  followTerm: string;
+  unFollowTerm: string;
 }
 export interface IGridItem {
   thumbnail: string;

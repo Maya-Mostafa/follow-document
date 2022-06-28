@@ -14,7 +14,7 @@ export class FollowDocumentProperties extends React.Component<IfollowDocumentPro
        
         return (
             <DialogContent
-                title="Follow Status"
+                title={`${this.props.followTerm} Status`}
                 showCloseButton={true}
                 onDismiss={this.props.close}
             >

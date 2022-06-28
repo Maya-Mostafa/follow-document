@@ -14,6 +14,8 @@ import { IFollowDocumentWebPartProps } from "./components/IFollowDocumentWebPart
 
 export interface IFollowDocumentWebPartWebPartProps {
   Title: string;
+  followTerm: string;
+  unFollowTerm: string;
 }
 
 export default class FollowDocumentWebPartWebPart extends BaseClientSideWebPart<IFollowDocumentWebPartWebPartProps> {
@@ -30,6 +32,8 @@ export default class FollowDocumentWebPartWebPart extends BaseClientSideWebPart<
         updateProperty: (value: string) => {
           this.properties.Title = value;
         },
+        followTerm: this.properties.followTerm,
+        unFollowTerm: this.properties.unFollowTerm
       });
 
     ReactDom.render(element, this.domElement);
@@ -57,6 +61,14 @@ export default class FollowDocumentWebPartWebPart extends BaseClientSideWebPart<
                 PropertyPaneTextField("Title", {
                   label: strings.TitleFieldLabel,
                   value: strings.TitleFieldValue,
+                }),
+                PropertyPaneTextField("followTerm", {
+                  label: 'Follow Term',
+                  value: this.properties.followTerm,
+                }),
+                PropertyPaneTextField("unFollowTerm", {
+                  label: 'Unfollow Term',
+                  value: this.properties.unFollowTerm,
                 }),
               ],
             },

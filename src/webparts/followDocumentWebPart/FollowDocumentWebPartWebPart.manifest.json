@@ -21,7 +21,9 @@
     "description": { "default": "followDocumentWebPart description" },
     "officeFabricIconFontName": "Page",
     "properties": {
-      "description": "followDocumentWebPart"
+      "description": "followDocumentWebPart",
+      "followTerm" : "Favorite",
+      "unFollowTerm" : "Unfavorite"
     }
   }]
 }

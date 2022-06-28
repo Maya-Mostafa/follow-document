@@ -341,6 +341,8 @@ export default class FollowDocumentWebPart extends React.Component<IFollowDocume
     const dialog: FollowDocumentDialog = new FollowDocumentDialog();
     dialog._followTypeDialog = followType.Unfollow;
     dialog._filename = action.Title;
+    dialog.followTerm = this.props.followTerm;
+    dialog.unfollowTerm = this.props.unFollowTerm;
     dialog.show().then(async () => {
       if (dialog._followDocumentState) {
         const graphService: Graph = new Graph();

@@ -19,6 +19,9 @@ export default class FollowDocumentDialog extends BaseDialog {
     public _fileInfo: FollowDocument;
     public return: (string) => void;
 
+    public followTerm: string;
+    public unfollowTerm: string;
+
 
     public async initialize(url: string, type: followType = followType.Blank) {
         this._webUrl = url;
@@ -44,6 +47,8 @@ export default class FollowDocumentDialog extends BaseDialog {
                     <FollowDocumentProperties
                         url={this._webUrl}
                         close={this.close}
+                        followTerm={this.followTerm}
+                        unFollowTerm={this.unfollowTerm}
                     />;
                 break;
             case followType.SendTeams:
@@ -57,14 +62,14 @@ export default class FollowDocumentDialog extends BaseDialog {
                 break;
             case followType.Unfollow:
                 reactElement = <DialogContent
-                    title="Follow Status"
+                    title={`${this.followTerm} Status`}
                     showCloseButton={true}
                     onDismiss={this.close}
                 >
                     <div>
-                        <div>Do you want to unfollow <b>"{this._filename}"</b>?</div>
+                        <div>Do you want to {this.unfollowTerm} <b>"{this._filename}"</b>?</div>
                         <DialogFooter>
-                            <PrimaryButton onClick={Unfollow} text="Unfollow" />
+                            <PrimaryButton onClick={Unfollow} text={this.unfollowTerm} />
                             <DefaultButton onClick={this.close} text="Cancel" />
                         </DialogFooter>
 
