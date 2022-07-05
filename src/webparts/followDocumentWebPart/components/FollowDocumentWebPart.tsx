@@ -102,7 +102,7 @@ export default class FollowDocumentWebPart extends React.Component<IFollowDocume
   private getFollowDocuments = async (followDocuments: FollowDocument[]): Promise<any> => {
     const graphService: Graph = new Graph();
     let graphData: any = [];
-    graphData = await graphService.getGraphContent(`https://graph.microsoft.com/v1.0/me/drive/following?$select=id,name,webUrl,parentReference,followed,size&Top=1000&Filter=size%20ne%200`, this.props.context);
+    graphData = await graphService.getGraphContent(`https://graph.microsoft.com/v1.0/me/drive/following?$select=id,name,webUrl,parentReference,followed,size,lastModifiedDateTime,lastModifiedBy&Top=1000&Filter=size%20ne%200`, this.props.context);
     if (graphData.value !== undefined) {
       graphData.value.forEach(data => {
 
@@ -112,7 +112,10 @@ export default class FollowDocumentWebPart extends React.Component<IFollowDocume
           WebFileUrl: data.webUrl,
           DriveId: data.parentReference.driveId,
           followedDateTime: new Date(data.followed.followedDateTime),
+          lastModifiedDate: new Date(data.lastModifiedDateTime).toDateString(),
+          lastModifiedBy: data.lastModifiedBy
         } as FollowDocument;
+
         this.GetIcon(data.name).then(icon => {
           followDocument.IconUrl = (this.props.context.pageContext.web.absoluteUrl + "/_layouts/15/images/lg_" + icon).replace("lg_iczip.gif", "lg_iczip.png").replace("lg_icmsg.png", "lg_icmsg.gif");
         });
@@ -132,6 +135,7 @@ export default class FollowDocumentWebPart extends React.Component<IFollowDocume
       let uniqueArray = [];
       uniqueArray = followDocuments.filter(obj => !uniq[obj.DriveId] && (uniq[obj.DriveId] = true));
       const requests = this.getBatchRequest(uniqueArray, "/me/drives/{driveId}/list?select=id,webUrl,parentReference", "GET");
+      console.log("requests", requests);
       for (let index = 0; index < requests.length; index++) {
         const graphData: any = await graphService.postGraphContent("https://graph.microsoft.com/v1.0/$batch", requests[index]);
         graphData.responses.forEach((data: any) => {
@@ -195,6 +199,7 @@ export default class FollowDocumentWebPart extends React.Component<IFollowDocume
       const requests = this.getBatchRequest(uniqueArray, "/sites/{SiteId}?$select=id,siteCollection,webUrl,name,displayName", "GET");
       for (let index = 0; index < requests.length; index++) {
         const graphData = await graphService.postGraphContent("https://graph.microsoft.com/v1.0/$batch", requests[index]);
+        console.log("graphData", graphData);
         graphData.responses.forEach((data: any) => {
           followDocuments.forEach((followDocument: FollowDocument) => {
             if (followDocument.SiteId === data.body.id && (followDocument.Domain === undefined || followDocument.Domain === "")) {

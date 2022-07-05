@@ -20,4 +20,6 @@ export interface FollowDocument {
     preview?: string;
     Description?: string;
     followedDateTime?: Date;
+    lastModifiedDate?: string;
+    lastModifiedBy?: Array<any>;  
 }
