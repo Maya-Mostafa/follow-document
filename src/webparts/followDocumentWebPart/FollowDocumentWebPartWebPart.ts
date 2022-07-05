@@ -12,6 +12,8 @@ import * as strings from "FollowDocumentWebPartWebPartStrings";
 import FollowDocumentWebPart from "./components/FollowDocumentWebPart";
 import { IFollowDocumentWebPartProps } from "./components/IFollowDocumentWebPartProps";
 
+import { Providers, SharePointProvider } from '@microsoft/mgt-spfx';
+
 export interface IFollowDocumentWebPartWebPartProps {
   Title: string;
   followTerm: string;
@@ -20,8 +22,14 @@ export interface IFollowDocumentWebPartWebPartProps {
 
 export default class FollowDocumentWebPartWebPart extends BaseClientSideWebPart<IFollowDocumentWebPartWebPartProps> {
   protected onInit() {
+    
     if (this.context.sdks.microsoftTeams) initializeIcons();
+    
+    if (!Providers.globalProvider) {
+      Providers.globalProvider = new SharePointProvider(this.context);
+    }
     return super.onInit();
+    
   }
   public render(): void {
     const element: React.ReactElement<IFollowDocumentWebPartProps> =
