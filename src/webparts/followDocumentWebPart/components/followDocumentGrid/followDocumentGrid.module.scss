@@ -54,3 +54,35 @@
     margin-bottom: 20px;
   }
 }
+
+
+.documentCardCntnr{
+  display: flex;
+  flex-wrap: wrap;
+  .documentCard{
+    margin: 10px;
+    width: 260px;
+    box-shadow: 1px 1px 4px 0px #ddd;
+    .docDetails{
+      padding: 15px;
+      border-bottom: 1px solid #f3f2f1;
+    }
+    .docName{
+      padding: 10px;
+      height: 40px;
+      display: flex;
+      border-bottom: 1px solid #f3f2f1;
+      span{
+        overflow: hidden;
+      }
+      img{
+        margin-right: 5px;
+      }
+    }
+    .docModifiedDate{
+      color: #777;
+      padding-left: 30px;
+      font-size: 12px;
+    }
+  }
+}
